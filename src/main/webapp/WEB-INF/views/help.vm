@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <link rel="icon" href="views/icon/icon.ico">
+
+    <title>密文检索系统</title>
+
+    <link href="views/css/bootstrap.min.css" rel="stylesheet">
+    <link href="views/css/help.css" rel="stylesheet">
+  </head>
+
+  <body>
+    <div class="site-wrapper">
+      <div class="site-wrapper-inner">
+        <div class="cover-container">
+
+          <div class="clearfix">
+            <div class="inner">
+              <nav>
+                <ul class="nav masthead-nav">
+                    #if($!login)
+                    <li><a href="#">$!account.username</a></li>
+                    <li><a href="search">搜索</a></li>
+                    <li><a href="manage">文件管理</a></li>
+                    <li><a href="info">个人信息</a></li>
+                    <li><a href="quit">退出</a></li>
+                    #else
+                    <li><a href="index">首页</a></li>
+                    <li><a href="login">登录</a></li>
+                    #end
+                    <li class="active"><a href="help">帮助</a></li>
+                    <li><a href="download">下载辅助工具</a></li>
+                </ul>
+              </nav>
+            </div>
+          </div>
+
+          <div class="inner cover">
+            <h1 class="cover-heading" style="text-align: center;">帮助中心</h1>
+            <p class="lead">
+                <dl>
+                    <dt class="bg-primary">是不是一定要使用辅助工具？辅助工具的作用是什么？</dt>
+                    <dd>
+                        辅助工具主要有三大功能<a href="helpAttachment">(了解更多)</a>：
+                        <ul>
+                            <li>生成用户密钥以及服务器密钥</li>
+                            <li>加密用户文件以及生成加密索引</li>
+                            <li>解密用户文件</li>
+                        </ul>
+                    </dt>
+                </dl>
+            </p>
+            <p class="lead">
+                <dl>
+                    <dt class="bg-primary">如何使用密文检索系统？</dt>
+                    <dd>基本流程是这样的：
+                        <ul>
+                            <li>
+                                使用辅助工具生成用户密钥和服务器密钥，
+                                其中用户密钥需要用户自行保存，用户登录系统后在个人信息一栏填写服务器密钥并提交到服务器，
+                                服务器密钥是服务器做计算时用的，并不能获取到用户的任何文件信息。
+                            </li>
+                            <li>
+                                用户使用辅助软件对需要的加密的文件加密并生成索引，然后在登录后的管理文件页面上传索引与文件。
+                                注意，上传文件后立刻搜索不一定能返回所有的正确结果，服务器需要一定时间来解析索引文件，具体时间随索引文件的大小而定。
+                            </li>
+                            <li>
+                                当用户需要查找哪些文件具有特定的几个关键字时，可在搜索页面查找。注意，首次打开页面搜索前需要取用户密钥文件。
+                                出于安全的考虑，每次刷新页面后再次搜索，用户都需要取密钥文件。
+                            </li>
+                            <li>
+                                用户可在返回的结果中下载需要的文件，然后利用辅助工具解密即可拿到源文件。
+                            </li>
+                        </ul>
+                    </dd>
+                </dt>
+            </p>
+            <p class="lead">
+                <dl>
+                    <dt class="bg-primary">听说有两种不同的检索模式？</dt>
+                    <dd>是的，并且系统会自动判断用户提交的查询所表示的检索模式。
+                        <ul>
+                            <li>
+                                排名检索。根据用户提交的关键字组合，按最相关次序返回所有含有一个或多个关键字的文件集合。
+                            </li>
+                            <li>
+                                布尔检索。根据用户提交的布尔表达式，返回满足此表达式的文件集合，注意结果没有次序。
+                                其中，用'&'表示'与'，用'|'表示'或'，用'-'表示'相对差'。
+                                它们的运算优先级是 '&' > '|' = '-'。不清楚的建议用括号来显式表示。
+                            </li>
+                        </ul>
+                    </dd>
+                </dl>
+            </p>
+            <p class="lead">
+                <dl>
+                    <dt class="bg-primary">
+                        好吧。排名检索我是明白了，就是像类似搜索引擎那样吧。但布尔检索究竟是什么鬼？
+                    </dt>
+                    <dd>
+                        。。。我举个例子吧。A，B，C，D分别是4个关键字，那么 A | (B - C) & D。
+                        那么根据运算优先级，它说的是：
+                        <ul>
+                            <li>(B - C)：含有B关键字但不含有C关键字的文件集合</li>
+                            <li>(B - C) & D：在上面的结果集合中，筛选出包含D关键字的文件</li>
+                            <li>A | (B - C) & D：返回上面的结果集合，以及所有包含A关键字的文件集合</li>
+                        </ul>
+                        为了包含所有运算符，这个例子略复杂，但意思是这样的。
+                    </dd>
+                </dl>
+            </p>
+            <p class="lead">
+                <dl>
+                    <dt class="bg-primary">我听说这个系统对中文支持不是很友好？</dt>
+                    <dd>
+                        中文是有一点问题的，我们做的是单字的加密，不包括短语。
+                        因此检索'上海'，可能会返回包含'上'或'海'其中一个字的文件集合。
+                        用布尔检索'上&海'可能会好点，但其实只是表示一个文件中出现了'上'和'海'，
+                        但不一定出现了'上海'这个词组。抱歉，这个问题暂时还没解决。
+                    </dd>
+                </dl>
+            </p>
+            <p class="lead">
+                <dl>
+                    <dt class="bg-primary">能否解释一下你们是怎样保证文件安全的？毕竟文件放在你们那，我怎么知道你们是不是偷偷把它解密了？</dt>
+                    <dd>
+                        虽然我们也很好奇你究竟存了些什么东西，可是密钥都你手里，想解密也做不到啊。
+                        我们就来解释一下所谓的用户密钥和服务器密钥是什么东西吧。
+                        <ul>
+                            <li>
+                                用户密钥有四个，(1)加密解密原文件的AES密钥；(2)(3)加密索引密文的HMAC密钥；
+                                (4)加密文件检索相关度的Paillier密钥。
+                            </li>
+                            <li>
+                                至于所谓的服务器密钥，只不过是Paillier的一个公钥，
+                                可以理解为只是服务器在计算文件相关度时的一个陷门，其他什么都做不到。
+                            </li>
+                        </ul>
+                    </dd>
+                </dl>
+            </p>
+          </div>
+
+          <div>
+            <div class="inner">
+                <a href=mailto:372812434@qq.com>@That</a>
+            </div>
+          </div>
+
+        </div>
+
+      </div>
+
+    </div>
+  </body>
+</html>

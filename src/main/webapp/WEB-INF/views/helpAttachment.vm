@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <link rel="icon" href="views/icon/icon.ico">
+
+    <title>密文检索系统</title>
+
+    <link href="views/css/bootstrap.min.css" rel="stylesheet">
+    <link href="views/css/help.css" rel="stylesheet">
+  </head>
+
+  <body>
+    <div class="site-wrapper">
+      <div class="site-wrapper-inner">
+        <div class="cover-container">
+
+          <div class="clearfix">
+            <div class="inner">
+              <nav>
+                <ul class="nav masthead-nav">
+                    <li><a href="index">首页</a></li>
+                    <li class="active"><a href="help">帮助</a></li>
+                    <li><a href="download">下载辅助工具</a></li>
+                </ul>
+              </nav>
+            </div>
+          </div>
+
+          <div class="inner cover">
+            <h1 class="cover-heading" style="text-align: center;">辅助工具使用指南</h1>
+            <p class="lead">
+                <dl>
+                    <dt class="bg-primary">使用辅助工具前，我有什么需要知道的？</dt>
+                    <dd>
+                        <ul>
+                            <li>
+                                目前辅助工具是使用Java语言编写的，依赖桌面端的JRE。
+                                <a href="http://www.oracle.com/technetwork/cn/java/javase/downloads/index.html" target="view_window">(下载JRE)</a>
+                            </li>
+                            <li>
+                                目前辅助工具只能在命令行里使用，暂不提供用户界面。
+                            </li>
+                            <li>
+                                使用辅助工具的几个基本命令：
+                                <ul>
+                                    <li>
+                                        java -jar helper.jar -help
+                                    </li>
+                                    <li>
+                                        java -jar helper.jar -genkey outputPath
+                                    </li>
+                                    <li>
+                                        java -jar helper.jar -secureindex inputPath outputPath keyFile (startId)
+                                    </li>
+                                    <li>
+                                        java -jar helper.jar -decrypt inputPath outputPath keyFile
+                                    </li>
+                                </ul>
+                            </li>
+                        </ul>
+                    </dd>
+                </dl>
+            </p>
+            <p class="lead">
+                <dl>
+                    <dt class="bg-primary">怎样生成用户密钥以及服务器密钥？</dt>
+                    <dd>
+                        <ul>
+                            <li>
+                                java -jar helper.jar -genkey outputPath：生成用户密钥keyFile以及服务器密钥serverFile到outputPath目录路径。
+                            </li>
+                            <li>
+                                keyFile需用户独立保存，文件的安全依赖于密钥的安全。其他的所有操作都依赖keyFile文件开展。
+                            </li>
+                            <li>
+                                serverFile在用户登录系统后，需要将其中信息输入到个人信息服务器密钥一栏，后续不需要再保存此文件。
+                            </li>
+                            <li>
+                                不能修改keyFile以及serverFile中的信息，否则会导致服务不可用。
+                            </li>
+                        </ul>
+                    </dd>
+                </dl>
+            </p>
+            <p class="lead">
+                <dl>
+                    <dt class="bg-primary">怎样加密用户文件以及生成加密索引？</dt>
+                    <dd>
+                        <ul>
+                            <li>
+                                java -jar helper.jar -secureindex inputPath outputPath keyFile (startId)：
+                                将inputPath（也可以是单个.txt文件）目录下的所有.txt文件加密并生成加密索引，输出到outputPath目录路径。
+                            </li>
+                            <li>
+                                初次使用时，startId可不填。当密文系统中已存放文件，再次使用此功能时，需要在'文件管理'页面查看startId，并在使用时填写。
+                            </li>
+                        </ul>
+                    </dd>
+                </dl>
+            </p>
+            <p class="lead">
+                <dl>
+                    <dt class="bg-primary">怎样解密用户文件？</dt>
+                    <dd>
+                        <ul>
+                            <li>
+                                java -jar helper.jar -decrypt inputPath outputPath keyFile：
+                                将inputPath（也可以是单个.dat文件）目录下的所有.dat文件解密，输出到outputPath目录路径。
+                            </li>
+                            <li>
+                                在系统中下载到用户密文文件后，可使用此功能解密。
+                            </li>
+                        </ul>
+                    </dd>
+                </dl>
+            </p>
+          </div>
+
+          <div>
+            <div class="inner">
+                <a href=mailto:372812434@qq.com>@That</a>
+            </div>
+          </div>
+
+        </div>
+
+      </div>
+
+    </div>
+  </body>
+ </html>

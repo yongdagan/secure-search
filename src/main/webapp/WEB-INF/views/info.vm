@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <link rel="icon" href="views/icon/icon.ico">
+
+    <title>密文检索系统</title>
+
+    <link href="views/css/bootstrap.min.css" rel="stylesheet">
+    <link href="views/css/cover.css" rel="stylesheet">
+    <link href="views/css/help.css" rel="stylesheet">
+    <link href="views/css/signup.css" rel="stylesheet">
+  </head>
+
+  <body>
+    <div class="site-wrapper">
+      <div class="site-wrapper-inner">
+        <div class="cover-container">
+
+          <div class="masthead clearfix">
+            <div class="inner">
+              <nav>
+                  <ul class="nav masthead-nav">
+                    <li><a href="#">$!username</a></li>
+                    <li><a href="search">搜索</a></li>
+                    <li><a href="manage">文件管理</a></li>
+                    <li class="active"><a href="info">个人信息</a></li>
+                    <li><a href="quit">退出</a></li>
+                    <li><a href="help">帮助</a></li>
+                    <li><a href="download">下载辅助工具</a></li>
+                  </ul>
+              </nav>
+            </div>
+          </div>
+
+          <div class="inner cover">
+              <h1 class="cover-heading">密文检索系统</h1>
+                <form class="form-signin" role="form" action="info" method="post">
+                    <div class="input-group">
+                        <input type="password" class="form-control" placeholder="原密码"
+                        name="oldPassword" required autofocus>
+                        <input type="password" class="form-control" placeholder="新密码"
+                        name="newPassword" id="newPassword">
+                        <input type="password" class="form-control" placeholder="重复输入新密码"
+                        name="rnewPassword" id="rnewPassword">
+                        <input type="text" class="form-control" placeholder="服务器钥匙"
+                        name="addKey" value="$!addKey" id="addKey">
+                    </div>
+                    <p>
+
+                    </p>
+                    <div>
+                        <button type="submit" class="btn btn-primary btn-block" id="update">更新</button>
+                    </div>
+                </form>
+          </div>
+
+          <div class="mastfoot">
+            <p id="tip"
+                #if($!good == "good")
+                    class="alert alert-success"
+                #elseif($!good == "bad")
+                    class="alert alert-danger"
+                #end>
+                $!tip
+            </p>
+            <div class="inner">
+                <a href=mailto:372812434@qq.com>@That</a>
+            </div>
+
+          </div>
+
+        </div>
+
+      </div>
+
+    </div>
+
+    <script src="views/js/jquery.js"></script>
+    <script charset="utf-8">
+        $(function(){
+            $("#update").click(function(e){
+                if($("#newPassword").val() !== $("#rnewPassword").val()) {
+                    $("#newPassword").val("");
+                    $("#rnewPassword").val("");
+                    $("#tip").text("两次输入的新密码不一致");
+                    $("#tip").addClass("alert alert-danger");
+                    e.preventDefault();
+                } else if($("#newPassword").val() === "" && $("#addKey").val() === "") {
+                    $("#tip").text("更新必须填写新密码或服务器钥匙其中一项");
+                    $("#tip").addClass("alert alert-danger");
+                    e.preventDefault();
+                } else if($("#newPassword").val().length !== 0 && $("#newPassword").val().length < 8) {
+                    $("#tip").text("密码长度不能小于8！");
+                    $("#tip").addClass("alert alert-danger");
+                    e.preventDefault();
+                }
+            });
+//            $("#addKey").focus(function(){
+//                if($("#addKey").val() !== "") {
+//                    alert("注意，修改此项会导致旧的文件不可用！");
+//                }
+//            });
+        });
+    </script>
+
+
+  </body>
+</html>

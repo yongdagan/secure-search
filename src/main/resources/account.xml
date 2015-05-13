@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!DOCTYPE sqlMap
+	PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN"
+	"http://ibatis.apache.org/dtd/sql-map-2.dtd">
+
+<sqlMap>
+	<typeAlias alias="Account" type="com.gmail.yongdagan.secure_search.persist.dataobject.Account" />
+	<typeAlias alias="String" type="java.lang.String" />
+	<typeAlias alias="Long" type="java.lang.Long" />
+
+	<select id="Account.getAccountById" resultClass="Account" parameterClass="Long">
+		<![CDATA[
+		SELECT * FROM account WHERE id = #id# LIMIT 1
+		]]>
+	</select>
+
+	<select id="Account.getAccountByUsername" resultClass="Account" parameterClass="String">
+		<![CDATA[
+		SELECT * FROM account WHERE username = #username# LIMIT 1
+		]]>
+	</select>
+
+	<insert id="Account.addAccount" parameterClass="Account">
+		<![CDATA[
+		INSERT INTO account (username, password, addKey, capacity)
+		VALUES (#username#, #password#, #addKey#, #capacity#)
+		]]>
+		<selectKey keyProperty="id" resultClass="Long">
+		<![CDATA[
+		SELECT LAST_INSERT_ID() AS id
+		]]>
+		</selectKey>
+	</insert>
+
+	<update id="Account.updateAccount" parameterClass="Account">
+		<![CDATA[
+		UPDATE account
+		SET password = #password#, addKey = #addKey#, capacity = #capacity#
+		WHERE id = #id#
+		]]>
+	</update>
+
+	<delete id="Account.deleteAccount" parameterClass="Long">
+		<![CDATA[
+		DELETE FROM account
+		WHERE id = #id#
+		]]>
+	</delete>
+
+</sqlMap>

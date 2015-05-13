@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <link rel="icon" href="views/icon/icon.ico">
+
+    <title>密文检索系统</title>
+
+    <link href="views/css/bootstrap.min.css" rel="stylesheet">
+    <link href="views/css/cover.css" rel="stylesheet">
+    <link href="views/css/help.css" rel="stylesheet">
+  </head>
+
+  <body>
+    <div class="site-wrapper">
+      <div class="site-wrapper-inner">
+        <div class="cover-container">
+
+          <div class="masthead clearfix">
+            <div class="inner">
+              <nav>
+                <ul class="nav masthead-nav">
+                  <li class="active"><a href="index">首页</a></li>
+                  <li><a href="login">登录</a></li>
+                  <li><a href="help">帮助</a></li>
+                  <li><a href="download">下载辅助工具</a></li>
+                </ul>
+              </nav>
+            </div>
+          </div>
+
+          <div class="inner cover">
+            <h1 class="cover-heading">密文检索系统</h1>
+            <p class="lead">
+                密码检索系统提供一个加密的远程空间存放用户的私人文件（目前只支持TXT文本），并支持基于关键字的安全检索功能，防止包括服务器在内的第三方获取用户文件信息。
+            </p>
+            <p class="lead">
+                <a href="register" class="btn btn-lg btn-default">创建新账户</a>
+            </p>
+          </div>
+
+          <div class="mastfoot">
+            <div class="inner">
+                <a href=mailto:372812434@qq.com>@That</a>
+            </div>
+          </div>
+
+        </div>
+
+      </div>
+
+    </div>
+  </body>
+</html>

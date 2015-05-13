@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!DOCTYPE sqlMap
+    PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN"
+    "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+
+<sqlMap>
+    <typeAlias alias="Doc" type="com.gmail.yongdagan.secure_search.persist.dataobject.Doc" />
+    <typeAlias alias="String" type="java.lang.String" />
+    <typeAlias alias="Long" type="java.lang.Long" />
+    <typeAlias alias="HashMap" type="java.util.HashMap" />
+
+	<select id="Doc.getDocById" resultClass="Doc" parameterClass="Long">
+		<![CDATA[
+        SELECT * FROM doc
+        WHERE id = #id# LIMIT 1
+        ]]>
+	</select>
+
+    <select id="Doc.getDoc" resultClass="Doc" parameterClass="HashMap">
+        <![CDATA[
+        SELECT * FROM doc
+        WHERE docId = #docId# AND accountId = #accountId# LIMIT 1
+        ]]>
+    </select>
+
+    <select id="Doc.getDocsByAccountId" resultClass="Doc" parameterClass="Long">
+        <![CDATA[
+        SELECT * FROM doc
+        WHERE accountId = #accountId#
+        ]]>
+    </select>
+
+    <select id="Doc.getDocNumByAccountId" resultClass="Long" parameterClass="Long">
+        <![CDATA[
+        SELECT count(accountId) FROM doc
+        WHERE accountId = #accountId#
+        ]]>
+    </select>
+
+    <insert id="Doc.addDoc" parameterClass="Doc">
+        <![CDATA[
+        INSERT INTO doc (docId, accountId, name)
+        VALUES (#docId#, #accountId#, #name#)
+        ]]>
+        <selectKey keyProperty="id" resultClass="Long">
+           <![CDATA[
+           SELECT LAST_INSERT_ID() AS id
+           ]]>
+        </selectKey>
+    </insert>
+    
+    <update id="Doc.updateDoc" parameterClass="Doc">
+        <![CDATA[
+        UPDATE doc
+        SET name = #name#
+        WHERE docId = #docId# AND accountId = #accountId#
+        ]]>
+    </update>
+
+    <delete id="Doc.deleteDoc" parameterClass="HashMap">
+        <![CDATA[
+        DELETE FROM doc
+        WHERE docId = #docId# AND accountId = #accountId#
+        ]]>
+    </delete>
+
+    <delete id="Doc.deleteDocsByAccountId" parameterClass="Long">
+        <![CDATA[
+        DELETE FROM doc
+        WHERE accountId = #accountId#
+        ]]>
+    </delete>
+</sqlMap>

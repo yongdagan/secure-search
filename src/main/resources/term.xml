@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!DOCTYPE sqlMap
+    PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN"
+    "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+
+<sqlMap>
+    <typeAlias alias="Term" type="com.gmail.yongdagan.secure_search.persist.dataobject.Term" />
+    <typeAlias alias="String" type="java.lang.String" />
+    <typeAlias alias="Long" type="java.lang.Long" />
+    <typeAlias alias="HashMap" type="java.util.HashMap" />
+    <typeAlias alias="List" type="java.util.List" />
+
+    <select id="Term.getTermById" resultClass="Term" parameterClass="Long">
+        <![CDATA[
+        SELECT * FROM term WHERE id = #id# LIMIT 1
+        ]]>
+    </select>
+
+    <select id="Term.getTerm" resultClass="Term" parameterClass="HashMap">
+        <![CDATA[
+        SELECT * FROM term
+        WHERE accountId = #accountId# AND name = #name#
+        ]]>
+    </select>
+
+    <insert id="Term.addTerm" parameterClass="Term">
+        <![CDATA[
+        INSERT INTO term (accountId, name, trapdoor, docIds, scores)
+        VALUES (#accountId#, #name#, #trapdoor#, #docIds#, #scores#)
+        ]]>
+        <selectKey keyProperty="id" resultClass="Long">
+           <![CDATA[
+           SELECT LAST_INSERT_ID() AS id
+           ]]>
+        </selectKey>
+    </insert>
+    
+    <insert id="Term.addTermList" parameterClass="List">
+    	<![CDATA[
+        INSERT INTO term (accountId, name, trapdoor, docIds, scores) VALUES
+        ]]>
+        <iterate conjunction=",">
+        	<![CDATA[
+        	(#terms[].accountId#, #terms[].name#, #terms[].trapdoor#, #terms[].docIds#, #terms[].scores#)
+        	]]>
+        </iterate>
+    </insert>
+
+    <delete id="Term.deleteTerm" parameterClass="Long">
+        <![CDATA[
+        DELETE FROM term
+        WHERE id = #id#
+        ]]>
+    </delete>
+
+    <delete id="Term.deleteTermsByAccountId" parameterClass="Long">
+        <![CDATA[
+        DELETE FROM term
+        WHERE accountId = #accountId#
+        ]]>
+    </delete>
+</sqlMap>

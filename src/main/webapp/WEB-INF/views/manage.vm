@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html>
+  <head>
+      <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <link rel="icon" href="views/icon/icon.ico">
+
+    <title>密文检索系统</title>
+
+    <link href="views/css/bootstrap.min.css" rel="stylesheet">
+    <link href="views/css/cover.css" rel="stylesheet">
+    <link href="views/css/help.css" rel="stylesheet">
+  </head>
+
+  <body>
+
+    <div class="site-wrapper">
+      <div class="site-wrapper-inner">
+        <div class="cover-container">
+          <div class="masthead clearfix">
+            <div class="inner">
+                <nav>
+                    <ul class="nav masthead-nav">
+                      <li><a href="#">$!username</a></li>
+                      <li><a href="search">搜索</a></li>
+                      <li class="active"><a href="manage">文件管理</a></li>
+                      <li><a href="info">个人信息</a></li>
+                      <li><a href="quit">退出</a></li>
+                      <li><a href="help">帮助</a></li>
+                      <li><a href="download">下载辅助工具</a></li>
+                    </ul>
+                </nav>
+            </div>
+          </div>
+
+          <div class="inner cover">
+            <p class="lead">
+                #if($!docs.size() != 0)
+                <table width="600">
+                    <thead>
+                        <tr>
+                            <th>文件编号</th>
+                            <th>文件名</th>
+                            <th>操作</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        #foreach ($!doc in $!docs)
+                        <tr>
+                            <td>$!doc.docId</td>
+                            <td><a href="getFile?name=$!doc.name&id=$!doc.docId">$!doc.name</a></td>
+                            <td><a href="delete?id=$!doc.docId&name=$!doc.name" class="delete">删除</a></td>
+                        </tr>
+                        #end
+                    </tbody>
+                </table>
+                <ul class="nav masthead-nav">
+                    <li><label class="label label-primary">空间使用情况：</label></li>
+                    <li>$!capacity / $!totalCapacity MB</li>
+                </ul>
+                #else
+                您还没有上传任何文件。
+                #end
+
+            </p>
+
+          </div>
+
+            <p id="tips"
+                #if($!error)
+                    class="alert alert-danger"
+                #end
+            >$!error</p>
+                <p class="lead">
+                    <form class="form-inline" role="form" action="upload" method="post" enctype="multipart/form-data">
+                        <div class="input-group">
+                            <input type="file" name="files" multiple="multiple" id="files" style="display:none"/>
+                            <button type="button" class="btn btn-primary" id="fakeFiles">取文件</button>
+                        </div>
+                        <div class="btn-group" role="group">
+                            <button type="submit" class="btn btn-primary" id="upload">上传</button>
+                        </div>
+                    </form>
+                    <button type="button" class="btn btn-primary" id="clear">清空文件及索引</button>
+                </p>
+            <div class="mastfoot">
+
+                <div class="inner">
+                    <a href=mailto:372812434@qq.com>@That</a>
+                </div>
+            </div>
+
+
+        </div>
+
+      </div>
+
+    </div>
+
+    <script src="views/js/jquery.js"></script>
+
+    <script charset="utf-8">
+    $(function() {
+        $("#fakeFiles").click(function(){
+            $("#files").click();
+        });
+        $("#clear").click(function(e){
+            // alert
+            if(confirm("确认清除所有文件及索引？")) {
+                location.href="clearAccountFiles";
+            } else {
+                e.preventDefault();
+            }
+        });
+        $(".delete").click(function(e){
+            if(!confirm("确认删除此文件？")) {
+                e.preventDefault();
+            }
+        });
+        $("#upload").click(function(e){
+            if($("#files").val() === "") {
+                // alert
+                $("#tips").text("请选择要上传的文件！");
+                $("#tips").addClass("alert alert-danger");
+                e.preventDefault();
+            }
+        });
+    });
+    </script>
+
+  </body>
+</html>

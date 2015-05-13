@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <link rel="icon" href="views/icon/icon.ico">
+
+    <title>密文检索系统</title>
+
+    <link href="views/css/bootstrap.min.css" rel="stylesheet">
+    <link href="views/css/cover.css" rel="stylesheet">
+    <link href="views/css/help.css" rel="stylesheet">
+    <link href="views/css/signup.css" rel="stylesheet">
+
+  </head>
+
+  <body>
+
+    <div class="site-wrapper">
+        <div class="site-wrapper-inner">
+            <div class="cover-container ">
+              #if ($!login)
+                #set ($act = "login")
+                #set ($actCh = "登录")
+              #else
+                #set ($act = "register")
+                #set ($actCh = "注册")
+              #end
+
+              <div class=" masthead clearfix">
+                <div class="inner">
+                  <nav>
+                    <ul class="nav masthead-nav">
+                      <li><a href="index">首页</a></li>
+                      <li class="active"><a href="login">登录</a></li>
+                      <li><a href="help">帮助</a></li>
+                      <li><a href="download">下载辅助工具</a></li>
+                    </ul>
+                  </nav>
+                </div>
+              </div>
+
+              <div class="inner cover">
+                  <h1 class="cover-heading">密文检索系统</h1>
+                  <form class="form-signin" role="form" action="$!act" method="post">
+                    <input name="username" type="text" class="form-control" placeholder="用户名" required autofocus>
+                    <input name="password" id="password" type="password" class="form-control" placeholder="密码" required>
+
+                    #if ($!login)
+                    #else
+                    <input id="rpassword" type="password" class="form-control" placeholder="重复输入密码" required>
+                    #end
+
+                    <p id="tip" #if($!error)class="alert alert-danger"#end>$!error</p>
+                    <button class="btn btn-lg btn-success btn-block" type="submit" id="submit">$!actCh</button>
+                  </form>
+              </div>
+
+
+            </div>
+
+        </div>
+    </div>
+      #if (!$!login)
+      <script src="views/js/jquery.js"></script>
+      <script>
+      $(document).ready(function(){
+          $("#submit").on("click", function(e){
+              if($("#password").val() !== $("#rpassword").val()) {
+                  $("#password").val("");
+                  $("#rpassword").val("");
+                  $("#tip").text("两次输入的密码不一致");
+                  $("#tip").addClass("alert alert-danger");
+                  e.preventDefault();
+              } else if($("#rpassword").val().length < 8) {
+                  $("#tip").text("密码长度不能小于8！");
+                  $("#tip").addClass("alert alert-danger");
+                  e.preventDefault();
+              }
+          });
+      });
+      </script>
+      #end
+  </body>
+</html>

@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html>
+  <head>
+     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <link rel="icon" href="/views/icon/icon.ico">
+
+    <title>密文检索系统</title>
+
+    <link href="views/css/bootstrap.min.css" rel="stylesheet">
+    <link href="views/css/cover.css" rel="stylesheet">
+    <link href="views/css/help.css" rel="stylesheet">
+  </head>
+
+  <body>
+
+    <div class="site-wrapper">
+        <div class="cover-container">
+          <div class="inner cover">
+              <table id="files">
+                  <thead>
+                      <th>查询结果</th>
+                  </thead>
+                  <tbody>
+                      #foreach ($doc in $docs)
+                      <tr class="rows">
+                          <td><a href="getFile?name=$!doc.name&id=$!doc.docId">$!doc.name</a></td>
+                          #if($!searchType == "rank")
+                          <td class="score" style="display:none;">$!doc.score</td>
+                          #end
+                      </tr>
+                      #end
+                  </tbody>
+              </table>
+          </div>
+
+          <div>
+              <p id="keyTips">$!error</p>
+          </div>
+
+        </div>
+
+
+    </div>
+    #if($!searchType == "rank")
+    <script src="views/js/jquery.js"></script>
+    <script src="views/js/BigInteger.min.js"></script>
+    <script src="views/js/paillier.js"></script>
+    <script charset="utf-8">
+        $(function(){
+            // paillier decrypt
+            var n = bigInt(parent.keys[3]);
+            var g = bigInt(parent.keys[4]);
+            var lambda = bigInt(parent.keys[5]);
+            var mu = bigInt(parent.keys[6]);
+            paillier.initKey(n, g, lambda, mu);
+            $(".score").each(function(){
+                $(this).text(paillier.decrypt(bigInt($(this).text().trim())));
+            });
+            // sort
+            var rows = $(".rows").get();
+            rows.sort(function(a, b){
+                var score1 = parseInt($(a).children("td.score").text().trim());
+                var score2 = parseInt($(b).children("td.score").text().trim());
+                if(score1 < score2) return 1;
+                if(score1 > score2) return -1;
+                return 0;
+            });
+            $.each(rows, function(index, row){
+                $("#files").append(row);
+            });
+        });
+    </script>
+    #end
+  </body>
+</html>

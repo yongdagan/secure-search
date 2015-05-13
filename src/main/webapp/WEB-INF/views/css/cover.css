@@ -1,0 +1,19 @@
+a,
+a:focus,
+a:hover {
+  color: #fff;
+}
+
+.btn-default,
+.btn-default:hover,
+.btn-default:focus {
+  color: #333;
+  text-shadow: none;
+  background-color: #fff;
+  border: 1px solid #fff;
+}
+
+html,
+body {
+  text-align: center;
+}
