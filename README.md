@@ -29,3 +29,7 @@
 - Spring + SpringMVC + Velocity
 - HTML5 + JS
 - Maven
+
+#### 部署使用
+- 开发测试运行建议使用 Maven
+- 数据库表的构建参见：secure-search.sql，数据库配置修改参见：db.properties
