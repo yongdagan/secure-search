@@ -26,7 +26,7 @@
 #### 开发技术和使用工具
 - Java 7
 - MySQL
-- Spring + SpringMVC + Velocity
+- Spring + iBatis + Velocity
 - HTML5 + JS
 - Maven
 
