@@ -24,19 +24,19 @@ public class TestIbatisDocDAO {
 		
 		Doc doc = new Doc();
 		doc.setDocId(1L);;
-		doc.setAccountId(2L);
+		doc.setAccountId(222L);
 		doc.setName("name");
 		docDAO.addDoc(doc);
 	}
 	
 	@After
 	public void testDeleteDoc() throws Exception {
-		docDAO.deleteDoc(1L, 2L);
+		docDAO.deleteDoc(1L, 222L);
 	}
 	
 	@Test
 	public void testGetDoc() throws Exception {
-		Doc doc = docDAO.getDoc(1L, 2L);
+		Doc doc = docDAO.getDoc(1L, 222L);
 		assertEquals("name", doc.getName());
 		
 		doc = docDAO.getDoc(333L, 4L);
@@ -47,31 +47,34 @@ public class TestIbatisDocDAO {
 	public void testGetDocsByAccountId() throws Exception {
 		Doc doc = new Doc();
 		doc.setDocId(2L);
-		doc.setAccountId(2L);
+		doc.setAccountId(222L);
 		doc.setName("name");
 		docDAO.addDoc(doc);
 		
-		List<Doc> docs = docDAO.getDocsByAccountId(2L);
+		List<Doc> docs = docDAO.getDocsByAccountId(222L, 0L);
 		assertEquals(2, docs.size());
 		
-		docDAO.deleteDoc(2L, 2L);
+		docs = docDAO.getDocsByAccountId(222L, 1L);
+		assertEquals(1, docs.size());
 		
-		docs = docDAO.getDocsByAccountId(4555L);
+		docDAO.deleteDoc(2L, 222L);
+		
+		docs = docDAO.getDocsByAccountId(4555L, 0L);
 		assertTrue(docs.isEmpty());
 	}
 	
 	@Test
 	public void testGetDocNumByAccountId() throws Exception {
-		assertEquals(1, docDAO.getDocNumByAccountId(2L));
+		assertEquals(1, docDAO.getDocNumByAccountId(222L));
 	}
 	
 	@Test
 	public void testUpdateDoc() throws Exception {
-		Doc doc = docDAO.getDoc(1L, 2L);
+		Doc doc = docDAO.getDoc(1L, 222L);
 		assertEquals("name", doc.getName());
 		doc.setName("a");
 		docDAO.updateDoc(doc);
-		doc = docDAO.getDoc(1L, 2L);
+		doc = docDAO.getDoc(1L, 222L);
 		assertEquals("a", doc.getName());
 	}
 	
@@ -85,7 +88,7 @@ public class TestIbatisDocDAO {
 		
 		docDAO.deleteDocsByAccountId(1L);
 		assertNull(docDAO.getDoc(1L, 1L));
-		assertNotNull(docDAO.getDoc(1L, 2L));
+		assertNotNull(docDAO.getDoc(1L, 222L));
 	}
 	
 

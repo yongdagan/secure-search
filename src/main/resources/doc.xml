@@ -23,10 +23,11 @@
         ]]>
     </select>
 
-    <select id="Doc.getDocsByAccountId" resultClass="Doc" parameterClass="Long">
+    <select id="Doc.getDocsByAccountId" resultClass="Doc" parameterClass="HashMap">
         <![CDATA[
         SELECT * FROM doc
         WHERE accountId = #accountId#
+        LIMIT #offset#, 10
         ]]>
     </select>
 

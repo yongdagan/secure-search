@@ -129,6 +129,8 @@ public class FileController {
 	
 	@RequestMapping(value="/manage")
 	public String allFiles(HttpSession session, Model model,
+			@RequestParam(value="page", required=false) Integer page,
+			@RequestParam(value="pageNum", required=false) Integer pageNum,
 			@RequestParam(value="error", required=false) String error) {
 		Account account = (Account) session.getAttribute("account");
 		if(account == null) {
@@ -138,13 +140,25 @@ public class FileController {
 			error = new String(CryptoUtil.decodeBASE64(error));
 			model.addAttribute("error", error);
 		}
+		if(page == null || page.intValue() < 1) {
+			page = 1;
+		}
 		try {
-			List<Doc> docs = indexManager.getAccountFiles(account.getId());
+			if(pageNum == null) {
+				pageNum = (int) (indexManager.getDocNumByAccountId(account.getId()) / 10 + 1);
+			}
+			if(page > pageNum) {
+				page = pageNum;
+			}
+			List<Doc> docs = indexManager.getAccountFiles(account.getId(), page);
 			model.addAttribute("docs", docs);
 			model.addAttribute("username", account.getUsername());
 			model.addAttribute("capacity", (int)((double)account.getCapacity() / 1024 / 1024 * 1000) / 1000.0);
 			model.addAttribute("totalCapacity", (int)((double)MAX_CAPACITY / 1024 / 1024 * 1000) / 1000.0);
+			model.addAttribute("pageNum", pageNum);
+			model.addAttribute("page", page);
 		} catch (ServiceException e) {
+			e.printStackTrace();
 			model.addAttribute("error", "system error");
 		}
 		return "manage";

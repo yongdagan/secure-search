@@ -117,9 +117,9 @@
             </p>
           </div>
 
-          <div>
+          <div style="text-align: center">
             <div class="inner">
-                <a href=mailto:372812434@qq.com>@That</a>
+                <a href="mailto:372812434@qq.com" style="color: #fff">@That</a>
             </div>
           </div>
 

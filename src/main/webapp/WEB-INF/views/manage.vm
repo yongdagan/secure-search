@@ -57,6 +57,55 @@
                     <li><label class="label label-primary">空间使用情况：</label></li>
                     <li>$!capacity / $!totalCapacity MB</li>
                 </ul>
+                <nav><ul class="pagination"></ul></nav>
+                <nav>
+                    <ul class="pagination pagination-sm">
+                        #if($page != 1)
+                        #set ($previous = $page - 1)
+                        <li>
+                            <a href="manage?page=$!previous&pageNum=$!pageNum" aria-label="Previous">
+                                <span aria-hidden="true">&laquo;</span>
+                            </a>
+                        </li>
+                        #end
+
+                        #set ($tmp = $page - 1)
+                        #if($tmp > 0)
+                        #if($tmp < 3)
+                        #set ($previous = 1)
+                        #else
+                        #set ($previous = $tmp - 2)
+                        #end
+                        #foreach ($p in [$!previous..$!tmp])
+                        <li><a href="manage?page=$!p&pageNum=$!pageNum">$!p</a></li>
+                        #end
+                        #end
+
+                        <li class="active"><a href="manage?page=$!page&pageNum=$!pageNum">$!page</a></li>
+
+                        #set ($tmp = $page + 1)
+                        #if($tmp <= $pageNum)
+                        #if($tmp + 2 < $pageNum)
+                        #set ($next = $tmp + 2)
+                        #else
+                        #set ($next = $pageNum)
+                        #end
+                        #foreach ($p in [$!tmp..$!next])
+                        <li><a href="manage?page=$!p&pageNum=$!pageNum">$!p</a></li>
+                        #end
+                        #end
+
+                        #if($page != $pageNum)
+                        #set ($next = $page + 1)
+                        <li>
+                            <a href="manage?page=$!next&pageNum=$!pageNum" aria-label="Next">
+                                <span aria-hidden="true">&raquo;</span>
+                            </a>
+                        </li>
+                        #end
+                    </ul>
+                </nav>
+
                 #else
                 您还没有上传任何文件。
                 #end
@@ -85,7 +134,7 @@
             <div class="mastfoot">
 
                 <div class="inner">
-                    <a href=mailto:372812434@qq.com>@That</a>
+                    <a href="mailto:372812434@qq.com">@That</a>
                 </div>
             </div>
 

@@ -230,10 +230,10 @@ public class IndexManagerImpl implements IndexManager {
 	}
 	
 	@Override
-	public List<Doc> getAccountFiles(Long accountId) throws ServiceException {
+	public List<Doc> getAccountFiles(Long accountId, Integer page) throws ServiceException {
 		List<Doc> docs = new ArrayList<Doc>();
 		try {
-			docs = docDAO.getDocsByAccountId(accountId);
+			docs = docDAO.getDocsByAccountId(accountId, (page - 1) * 10L);
 		} catch (PersistException e) {
 			throw new ServiceException(this.getClass().getName() + e);
 		}
@@ -373,6 +373,14 @@ public class IndexManagerImpl implements IndexManager {
 	public void addDoc(Doc doc) throws ServiceException {
 		try {
 			docDAO.addDoc(doc);
+		} catch (PersistException e) {
+			throw new ServiceException(this.getClass().getName() + e);
+		}
+	}
+	@Override
+	public long getDocNumByAccountId(Long accountId) throws ServiceException {
+		try {
+			return docDAO.getDocNumByAccountId(accountId);
 		} catch (PersistException e) {
 			throw new ServiceException(this.getClass().getName() + e);
 		}

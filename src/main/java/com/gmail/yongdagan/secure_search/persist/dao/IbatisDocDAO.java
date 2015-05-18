@@ -17,7 +17,6 @@ public class IbatisDocDAO implements DocDAO {
 
 	@Override
 	public Doc getDoc(Long docId, Long accountId) throws PersistException {
-		// TODO Auto-generated method stub
 		Doc doc = null;
 		try {
 			HashMap<String, Object> map = new HashMap<String, Object>();
@@ -35,11 +34,13 @@ public class IbatisDocDAO implements DocDAO {
 	}
 	
 	@Override
-	public List<Doc> getDocsByAccountId(Long accountId) throws PersistException {
-		
+	public List<Doc> getDocsByAccountId(Long accountId, Long offset) throws PersistException {
 		List<Doc> docs = null;
 		try {
-			docs = sqlMapClient.queryForList("Doc.getDocsByAccountId", accountId);
+			HashMap<String, Long> map = new HashMap<String, Long>();
+			map.put("accountId", accountId);
+			map.put("offset", offset);
+			docs = sqlMapClient.queryForList("Doc.getDocsByAccountId", map);
 		} catch (SQLException e) {
 			throw new PersistException(this.getClass().getName() + ":" + e.getMessage());
 		}
