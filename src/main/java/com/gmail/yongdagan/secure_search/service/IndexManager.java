@@ -13,6 +13,7 @@ public interface IndexManager {
 	public List<Doc> booleanSearch(Long accountId, String termNames, String trapdoors) throws ServiceException;
 	public List<Doc> getAccountFiles(Long accountId, Integer page) throws ServiceException;
 	public long getDocNumByAccountId(Long accountId) throws ServiceException;
+	public long getNextStartIdByAccountId(Long accountId) throws ServiceException;
 	public boolean hasDoc(Long accountId, Long docId) throws ServiceException;
 	public int deleteDoc(Long accountId, Long docId) throws ServiceException;
 	public void addDoc(Doc doc) throws ServiceException;

@@ -37,6 +37,13 @@
         WHERE accountId = #accountId#
         ]]>
     </select>
+    
+    <select id="Doc.getMaxDocIdByAccountId" resultClass="Long" parameterClass="Long">
+        <![CDATA[
+        SELECT max(docId) FROM doc
+        WHERE accountId = #accountId#
+        ]]>
+    </select>
 
     <insert id="Doc.addDoc" parameterClass="Doc">
         <![CDATA[

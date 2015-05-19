@@ -16,16 +16,21 @@
     <div class="site-wrapper">
         <div class="cover-container">
           <div class="inner cover">
-              <table id="files">
+              <table id="files" width="300">
                   <thead>
-                      <th>查询结果</th>
+                      <tr>
+                          <th>文件编号</th>
+                          <th>文件名</th>
+                          <th>相关度</th>
+                      </tr>
                   </thead>
                   <tbody>
                       #foreach ($doc in $docs)
                       <tr class="rows">
+                          <td>$!doc.docId</td>
                           <td><a href="getFile?name=$!doc.name&id=$!doc.docId">$!doc.name</a></td>
                           #if($!searchType == "rank")
-                          <td class="score" style="display:none;">$!doc.score</td>
+                          <td class="score" style="">$!doc.score</td>
                           #end
                       </tr>
                       #end

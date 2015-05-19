@@ -108,5 +108,19 @@ public class IbatisDocDAO implements DocDAO {
 		}
 		return n;
 	}
+
+	@Override
+	public long getMaxDocIdByAccountId(Long accountId) throws PersistException {
+		long n = 0;
+		try {
+			Long tmp = (Long) sqlMapClient.queryForObject("Doc.getMaxDocIdByAccountId", accountId);
+			if(tmp != null) {
+				n = tmp.longValue();
+			}
+		} catch (SQLException e) {
+			throw new PersistException(this.getClass().getName() + ":" + e.getMessage());
+		}
+		return n;
+	}
 	
 }

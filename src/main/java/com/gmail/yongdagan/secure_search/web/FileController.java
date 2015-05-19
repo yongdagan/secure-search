@@ -130,7 +130,6 @@ public class FileController {
 	@RequestMapping(value="/manage")
 	public String allFiles(HttpSession session, Model model,
 			@RequestParam(value="page", required=false) Integer page,
-			@RequestParam(value="pageNum", required=false) Integer pageNum,
 			@RequestParam(value="error", required=false) String error) {
 		Account account = (Account) session.getAttribute("account");
 		if(account == null) {
@@ -144,9 +143,8 @@ public class FileController {
 			page = 1;
 		}
 		try {
-			if(pageNum == null) {
-				pageNum = (int) (indexManager.getDocNumByAccountId(account.getId()) / 10 + 1);
-			}
+			int startId = (int) indexManager.getNextStartIdByAccountId(account.getId());
+			int pageNum = (int) (indexManager.getDocNumByAccountId(account.getId()) - 1) / 10 + 1;
 			if(page > pageNum) {
 				page = pageNum;
 			}
@@ -157,6 +155,7 @@ public class FileController {
 			model.addAttribute("totalCapacity", (int)((double)MAX_CAPACITY / 1024 / 1024 * 1000) / 1000.0);
 			model.addAttribute("pageNum", pageNum);
 			model.addAttribute("page", page);
+			model.addAttribute("startId", startId);
 		} catch (ServiceException e) {
 			e.printStackTrace();
 			model.addAttribute("error", "system error");
@@ -167,7 +166,8 @@ public class FileController {
 	@RequestMapping(value="/delete")
 	public String deleteFile(HttpSession session, Model model,
 			@RequestParam(value="id", required=true) Long docId,
-			@RequestParam(value="name", required=true) String docName) {
+			@RequestParam(value="name", required=true) String docName,
+			@RequestParam(value="page", required=false) String page) {
 		Account account = (Account) session.getAttribute("account");
 		if(account == null) {
 			return "redirect:index";
@@ -187,7 +187,11 @@ public class FileController {
 		} catch (Exception e) {
 			model.addAttribute("error", "系统出错。请重试！");
 		}
-		return "redirect:/manage";
+		if(page == null) {
+			return "redirect:/manage";
+		} else {
+			return "redirect:/manage?page=" + page;
+		}
 	}
 	
 	@RequestMapping(value="/clearAccountFiles")

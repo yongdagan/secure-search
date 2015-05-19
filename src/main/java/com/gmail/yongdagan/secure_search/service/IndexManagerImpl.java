@@ -385,5 +385,14 @@ public class IndexManagerImpl implements IndexManager {
 			throw new ServiceException(this.getClass().getName() + e);
 		}
 	}
+	@Override
+	public long getNextStartIdByAccountId(Long accountId)
+			throws ServiceException {
+		try {
+			return docDAO.getMaxDocIdByAccountId(accountId) + 1;
+		} catch (PersistException e) {
+			throw new ServiceException(this.getClass().getName() + e);
+		}
+	}
 	
 }

@@ -48,14 +48,14 @@
                         <tr>
                             <td>$!doc.docId</td>
                             <td><a href="getFile?name=$!doc.name&id=$!doc.docId">$!doc.name</a></td>
-                            <td><a href="delete?id=$!doc.docId&name=$!doc.name" class="delete">删除</a></td>
+                            <td><a href="delete?id=$!doc.docId&name=$!doc.name&page=$!page" class="delete">删除</a></td>
                         </tr>
                         #end
                     </tbody>
                 </table>
                 <ul class="nav masthead-nav">
-                    <li><label class="label label-primary">空间使用情况：</label></li>
-                    <li>$!capacity / $!totalCapacity MB</li>
+                    <li><label class="label label-success">下一个起始ID：$!startId</label></li>
+                    <li><label class="label label-success">空间使用情况：$!capacity/$!totalCapacity MB</label></li>
                 </ul>
                 <nav><ul class="pagination"></ul></nav>
                 <nav>
@@ -63,7 +63,7 @@
                         #if($page != 1)
                         #set ($previous = $page - 1)
                         <li>
-                            <a href="manage?page=$!previous&pageNum=$!pageNum" aria-label="Previous">
+                            <a href="manage?page=$!previous" aria-label="Previous">
                                 <span aria-hidden="true">&laquo;</span>
                             </a>
                         </li>
@@ -77,11 +77,11 @@
                         #set ($previous = $tmp - 2)
                         #end
                         #foreach ($p in [$!previous..$!tmp])
-                        <li><a href="manage?page=$!p&pageNum=$!pageNum">$!p</a></li>
+                        <li><a href="manage?page=$!p">$!p</a></li>
                         #end
                         #end
 
-                        <li class="active"><a href="manage?page=$!page&pageNum=$!pageNum">$!page</a></li>
+                        <li class="active"><a href="manage?page=$!page">$!page</a></li>
 
                         #set ($tmp = $page + 1)
                         #if($tmp <= $pageNum)
@@ -91,14 +91,14 @@
                         #set ($next = $pageNum)
                         #end
                         #foreach ($p in [$!tmp..$!next])
-                        <li><a href="manage?page=$!p&pageNum=$!pageNum">$!p</a></li>
+                        <li><a href="manage?page=$!p">$!p</a></li>
                         #end
                         #end
 
                         #if($page != $pageNum)
                         #set ($next = $page + 1)
                         <li>
-                            <a href="manage?page=$!next&pageNum=$!pageNum" aria-label="Next">
+                            <a href="manage?page=$!next" aria-label="Next">
                                 <span aria-hidden="true">&raquo;</span>
                             </a>
                         </li>
@@ -123,13 +123,13 @@
                     <form class="form-inline" role="form" action="upload" method="post" enctype="multipart/form-data">
                         <div class="input-group">
                             <input type="file" name="files" multiple="multiple" id="files" style="display:none"/>
-                            <button type="button" class="btn btn-primary" id="fakeFiles">取文件</button>
+                            <button type="button" class="btn btn-primary btn-sm" id="fakeFiles">取文件</button>
                         </div>
                         <div class="btn-group" role="group">
-                            <button type="submit" class="btn btn-primary" id="upload">上传</button>
+                            <button type="submit" class="btn btn-primary btn-sm" id="upload">上传</button>
                         </div>
                     </form>
-                    <button type="button" class="btn btn-primary" id="clear">清空文件及索引</button>
+                    <button type="button" class="btn btn-primary btn-sm" id="clear">清空文件及索引</button>
                 </p>
             <div class="mastfoot">
 
