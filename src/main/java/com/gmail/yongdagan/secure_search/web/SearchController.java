@@ -8,6 +8,8 @@ import java.util.List;
 import javax.servlet.http.HttpSession;
 
 import org.apache.commons.io.FileUtils;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -33,6 +35,8 @@ public class SearchController {
 	@Autowired
 	private IndexManager indexManager;
 	
+	private Logger logger = LogManager.getLogger(SearchController.class.getName());
+	
 	@RequestMapping(value="/search", method=RequestMethod.GET)
 	public String showSearchPage(HttpSession session, Model model) {
 		Account account = (Account) session.getAttribute("account");
@@ -45,7 +49,9 @@ public class SearchController {
 	
 	@RequestMapping(value="/quit")
 	public String showHomePage(HttpSession session) {
+		String username = ((Account) session.getAttribute("account")).getUsername();
 		session.removeAttribute("account");
+		logger.info(username + ": quit");
 		return "redirect:/index";
 	}
 	
@@ -68,16 +74,18 @@ public class SearchController {
 				try {
 					docs = indexManager.booleanSearch(account.getId(), hmac, trapdoor);
 					model.addAttribute("searchType", "boolean");
+					logger.info(account.getUsername() + ": boolean search " + hmac);
 				} catch (ServiceException e) {
-					e.printStackTrace();
+					logger.error("boolean search error", e);
 					model.addAttribute("error", "系统出错。请重试！");
 				}
 			} else {
 				try {
 					docs = indexManager.rankSearch(account.getId(), account.getAddKey(), hmac, trapdoor);
 					model.addAttribute("searchType", "rank");
+					logger.info(account.getUsername() + ": rank search " + hmac);
 				} catch (ServiceException e) {
-					e.printStackTrace();
+					logger.error("rank search error", e);
 					model.addAttribute("error", "系统出错。请重试！");
 				}
 			}
@@ -117,12 +125,15 @@ public class SearchController {
 					addKey)) {
 					model.addAttribute("tip", "更新成功!");
 					model.addAttribute("good", "good");
+					logger.info(account.getUsername() + ": update information successfully");
 				} else {
 					model.addAttribute("tip", "密码错误!");
 					model.addAttribute("good", "bad");
+					logger.info(account.getUsername() + ": fail to update information");
 				}
 			} catch (ServiceException e) {
 				model.addAttribute("error", "系统出错。请重试！");
+				logger.error("update password error", e);
 			}
 		}
 		model.addAttribute("username", account.getUsername());
@@ -145,15 +156,15 @@ public class SearchController {
 			name = new String(name.getBytes("UTF-8"), "ISO8859-1");
 		} catch (UnsupportedEncodingException e1) {
 			// ignore
-			e1.printStackTrace();
 		}
 		headers.setContentDispositionFormData("attachment", name + ".dat");
 		try {
+			logger.info(account.getUsername() + ": download " + filename);
 			return new ResponseEntity<byte[]>(FileUtils.readFileToByteArray(Paths.get(
 					session.getServletContext().getRealPath("/"), "WEB-INF", "userFiles",
 					Long.toString(account.getId()), filename).toFile()), headers, HttpStatus.CREATED);
 		} catch (IOException e) {
-			e.printStackTrace();
+			logger.error("download user's file error", e);
 		}
 		return null;
 	}

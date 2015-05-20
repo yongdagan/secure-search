@@ -7,6 +7,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
 import org.apache.commons.io.FileUtils;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -30,6 +32,8 @@ public class HomeController {
 	private AccountManager accountManager;
 	@Autowired
 	private IndexManager indexManager;
+	
+	private Logger logger = LogManager.getLogger(HomeController.class.getName());
 	
 	@RequestMapping(value={"/", "/index", "/index.htm"}, method=RequestMethod.GET)
 	public String showHomePage(HttpSession session) {
@@ -66,14 +70,17 @@ public class HomeController {
 		} catch (ServiceException e) {
 			model.addAttribute("login", true);
 			model.addAttribute("error", "登录失败");
+			logger.error(username + ": login fail", e);;
 			return "login";
 		}
 		if(account == null) {
 			model.addAttribute("login", true);
 			model.addAttribute("error", "用户名或密码错误");
+			logger.info(username + ": login fail");
 			return "login";
 		} else {
 			session.setAttribute("account", account);
+			logger.info(username + ": login success");
 			return "redirect:/search";
 		}
 	}
@@ -89,8 +96,10 @@ public class HomeController {
 		Account account = null;
 		try {
 			account = accountManager.register(username, password);
+			logger.info(username + ": register");
 		} catch (ServiceException e) {
 			model.addAttribute("error", "注册失败");
+			logger.error("register fail", e);
 			return "login";
 		}
 		if(account == null) {
@@ -113,7 +122,7 @@ public class HomeController {
 					request.getServletContext().getRealPath("/"), "WEB-INF", "views", "helper.jar").toFile()),
 					headers, HttpStatus.CREATED);
 		} catch (IOException e) {
-			e.printStackTrace();
+			logger.error("helper.jar is missing", e);
 		}
 		return null;
 	}

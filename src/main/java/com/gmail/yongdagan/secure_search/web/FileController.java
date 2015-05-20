@@ -12,6 +12,8 @@ import java.util.List;
 
 import javax.servlet.http.HttpSession;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -36,6 +38,8 @@ public class FileController {
 	private IndexManager indexManager;
 	@Autowired
 	private AccountManager accountManager;
+	
+	private Logger logger = LogManager.getLogger(FileController.class.getName());
 	
 	@RequestMapping(value="/upload", method=RequestMethod.POST)
 	public String uploadFiles(HttpSession session, Model model,
@@ -114,12 +118,14 @@ public class FileController {
 							Path filePath = accountPath.resolve(docs.get(fileName.substring(0, fileName.lastIndexOf(".")))
 									+ fileName);
 							file.transferTo(filePath.toFile());
+							logger.info(account.getUsername() + ": upload " + fileName);
 						}
 					}
 					// update capacity
 					accountManager.updateCapacity(account, account.getCapacity() + uploadSize);
+					logger.info(account.getUsername() + ": upload " + uploadSize + "B");
 				} catch (Exception e) {
-					e.printStackTrace();
+					logger.error("upload error", e);
 					model.addAttribute("error", "system error");
 				}
 			}
@@ -157,7 +163,7 @@ public class FileController {
 			model.addAttribute("page", page);
 			model.addAttribute("startId", startId);
 		} catch (ServiceException e) {
-			e.printStackTrace();
+			logger.error("file management error", e);
 			model.addAttribute("error", "system error");
 		}
 		return "manage";
@@ -183,9 +189,11 @@ public class FileController {
 				if(Files.deleteIfExists(file)) {
 					accountManager.updateCapacity(account, account.getCapacity() - size);
 				}
+				logger.info(account.getUsername() + ": delete " + file.getFileName().toString());
 			}
 		} catch (Exception e) {
 			model.addAttribute("error", "系统出错。请重试！");
+			logger.error("delete file error", e);
 		}
 		if(page == null) {
 			return "redirect:/manage";
@@ -205,8 +213,10 @@ public class FileController {
 					"WEB-INF", "userFiles", Long.toString(account.getId()));
 			indexManager.clearIndexAndFiles(account.getId(), accountPath);
 			accountManager.updateCapacity(account, 0L);
+			logger.info(account.getUsername() + ": clear files");
 		} catch (ServiceException e) {
 			model.addAttribute("error", "系统出错。请重试！");
+			logger.error("clear files error", e);
 		}
 		return "redirect:/manage";
 	}
@@ -228,7 +238,7 @@ public class FileController {
 			try {
 				indexManager.parseIndexFile(accountId, inputStream, accountPath);
 			} catch (ServiceException e) {
-				e.printStackTrace();
+				logger.error("parse index error", e);
 			}
 		}
 		
