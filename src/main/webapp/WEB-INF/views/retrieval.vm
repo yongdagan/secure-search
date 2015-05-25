@@ -30,7 +30,7 @@
                           <td>$!doc.docId</td>
                           <td><a href="getFile?name=$!doc.name&id=$!doc.docId">$!doc.name</a></td>
                           #if($!searchType == "rank")
-                          <td class="score" style="">$!doc.score</td>
+                          <td class="score" style="display:none">$!doc.score</td>
                           #end
                       </tr>
                       #end
@@ -73,6 +73,7 @@
             $.each(rows, function(index, row){
                 $("#files").append(row);
             });
+            $(".score").show();
         });
     </script>
     #end

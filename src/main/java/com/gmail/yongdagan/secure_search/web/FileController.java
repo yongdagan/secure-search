@@ -62,9 +62,15 @@ public class FileController {
 			// enough capacity
 			if(uploadSize + account.getCapacity() <= MAX_CAPACITY) {
 				Path accountPath = Paths.get(session.getServletContext()
-						.getRealPath("/"), "WEB-INF", "userFiles", Long
-						.toString(account.getId()));
+						.getRealPath("/"), "WEB-INF", "userFiles");
 				try {
+					// create accounts directory if not exists
+					try {
+						Files.createDirectory(accountPath);
+					} catch (FileAlreadyExistsException e) {
+						// ignore
+					}
+					accountPath = accountPath.resolve(Long.toString(account.getId()));
 					// create account directory if not exists
 					try {
 						Files.createDirectory(accountPath);
